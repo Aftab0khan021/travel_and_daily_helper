@@ -1,0 +1,139 @@
+You are a senior full-stack engineer and PWA expert.
+
+I have an existing repository named:
+"travel_and_daily_helper"
+
+GOAL:
+Fix and refactor this project into a CLEAN, OFFLINE-FIRST Progressive Web App (PWA) suitable for Android Play Store publishing via PWABuilder.
+
+------------------------------------
+CRITICAL REQUIREMENTS
+------------------------------------
+
+1. REMOVE UNNECESSARY BACKEND
+- Completely REMOVE Node.js backend logic
+- DELETE:
+  - server/
+  - drizzle-orm
+  - PostgreSQL schemas
+  - zod API schemas
+  - feedback/users tables
+- This app must work FULLY OFFLINE with NO server dependency.
+
+------------------------------------
+
+2. CONVERT TO PURE CLIENT-SIDE REACT PWA
+- Use React + Vite (already present)
+- Mobile-first UI
+- All logic runs in browser
+- Use LocalStorage for persistence
+
+------------------------------------
+
+3. FIX PROJECT STRUCTURE TO THIS
+------------------------------------
+client/
+ ├── public/
+ │   ├── manifest.json
+ │   ├── service-worker.js
+ │   ├── icon-192.png
+ │   └── icon-512.png
+ │
+ ├── src/
+ │   ├── pages/
+ │   │   ├── Home.tsx
+ │   │   ├── Translator.tsx
+ │   │   ├── Currency.tsx
+ │   │   ├── Emergency.tsx
+ │   │   ├── UnitConverter.tsx
+ │   │   └── Settings.tsx
+ │   │
+ │   ├── data/
+ │   │   ├── translator.json
+ │   │   └── emergency.json
+ │   │
+ │   ├── utils/
+ │   │   ├── currencyRates.ts
+ │   │   └── converters.ts
+ │   │
+ │   ├── theme/
+ │   │   └── darkMode.ts
+ │   │
+ │   ├── App.tsx
+ │   └── main.tsx
+------------------------------------
+
+------------------------------------
+FEATURE FIXES (MUST IMPLEMENT)
+------------------------------------
+
+1. HOME DASHBOARD
+- Grid layout
+- Navigation cards
+- Touch-friendly UI
+
+2. OFFLINE TRANSLATOR (EN ↔ HI)
+- Use local JSON dictionary
+- No API calls
+- Graceful fallback if word not found
+
+3. CURRENCY CONVERTER
+- INR, USD, EUR
+- Hardcoded rates
+- Offline
+- Last updated label
+
+4. EMERGENCY NUMBERS (INDIA)
+- Police: 100
+- Ambulance: 108
+- Fire: 101
+- One-tap dial using tel: links
+
+5. UNIT CONVERTER
+- Length (km, m, cm)
+- Weight (kg, g)
+- Temperature (C ↔ F)
+
+6. SETTINGS
+- Dark mode toggle
+- Save preference in LocalStorage
+- Persist after reload
+
+------------------------------------
+
+4. PWA REQUIREMENTS (MANDATORY)
+------------------------------------
+- Valid manifest.json
+- Service worker caching:
+  - HTML
+  - JS
+  - JSON
+  - Icons
+- App must:
+  - Work fully offline
+  - Be installable on Android
+  - Pass Lighthouse PWA checks
+
+------------------------------------
+
+5. CODE QUALITY
+------------------------------------
+- Remove unused files
+- Remove unused dependencies
+- No TODOs
+- No commented-out junk
+- Clean, readable React code
+- Use hooks properly
+
+------------------------------------
+
+FINAL OUTPUT EXPECTED
+------------------------------------
+- Refactored working project
+- Runs with: npm install && npm run dev
+- No backend code
+- Offline PWA ready
+- Compatible with PWABuilder for AAB generation
+
+Start by cleaning the repository, then refactor step-by-step.
+DO NOT skip any requirement.
