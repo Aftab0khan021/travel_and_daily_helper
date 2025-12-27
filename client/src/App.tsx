@@ -1,93 +1,48 @@
-import { useLocation, Link } from "wouter";
-import { ArrowLeft, Menu } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 import { useEffect } from "react";
-import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
+import { Switch, Route } from "wouter";
+import { AdMob } from '@capacitor-community/admob';
+import Home from "./pages/Home";
+import Translator from "./pages/Translator";
+import Currency from "./pages/Currency";
+import Emergency from "./pages/Emergency";
+import Units from "./pages/Units";
+import Guide from "./pages/Guide";
+import Settings from "./pages/Settings";
+import NotFound from "./pages/not-found";
 
-interface LayoutProps {
-  children: React.ReactNode;
-  title: string;
-  showBack?: boolean;
+function Router() {
+  return (
+    <Switch>
+      <Route path="/" component={Home} />
+      <Route path="/translator" component={Translator} />
+      <Route path="/currency" component={Currency} />
+      <Route path="/emergency" component={Emergency} />
+      <Route path="/units" component={Units} />
+      <Route path="/guide" component={Guide} />
+      <Route path="/settings" component={Settings} />
+      <Route component={NotFound} />
+    </Switch>
+  );
 }
 
-export function Layout({ children, title, showBack = true }: LayoutProps) {
-  const [, setLocation] = useLocation();
-
+export default function App() {
   useEffect(() => {
-    const showBanner = async () => {
+    const initAdMob = async () => {
       try {
-        await AdMob.showBanner({
-          adId: 'ca-app-pub-3940256099942544/6300978111', // Google's Official Test ID (Always use this for dev)
-          position: BannerAdPosition.BOTTOM,
-          size: BannerAdSize.BANNER,
-          margin: 0,
+        // Initialize AdMob
+        await AdMob.initialize({
+          requestTrackingAuthorization: true,
+          testingDevices: ['2077ef9a63d2b398840261c8221a0c9b'], 
+          initializeForTesting: true,
         });
+        console.log("AdMob initialized");
       } catch (e) {
-        console.log("AdMob banner failed (likely running on web, not android)", e);
+        console.error("AdMob init failed", e);
       }
     };
 
-    // Show banner when layout mounts
-    showBanner();
-
-    // Cleanup: Hide banner when component unmounts (optional, but good practice)
-    return () => {
-       // AdMob.hideBanner().catch(console.error); 
-       // We usually keep the banner persistent, so I commented this out.
-    };
+    initAdMob();
   }, []);
 
-  return (
-    <div className="min-h-screen bg-muted/30 pb-20"> {/* Increased bottom padding for Ad */}
-      <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/40">
-        <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
-          {showBack ? (
-            <button
-              onClick={() => setLocation("/")}
-              className="p-2 -ml-2 rounded-full hover:bg-muted transition-colors active:scale-95"
-            >
-              <ArrowLeft className="w-6 h-6 text-foreground" />
-            </button>
-          ) : (
-            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/25">
-              <svg 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                className="w-6 h-6 text-primary-foreground"
-                strokeWidth="2.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-            </div>
-          )}
-
-          <h1 className="text-lg font-bold font-display tracking-tight absolute left-1/2 -translate-x-1/2">
-            {title}
-          </h1>
-
-          {!showBack && (
-             <Link href="/settings" className="p-2 -mr-2 rounded-full hover:bg-muted transition-colors active:scale-95">
-               <Menu className="w-6 h-6 text-foreground" />
-             </Link>
-          )}
-          {showBack && <div className="w-10" />} {/* Spacer for balance */}
-        </div>
-      </header>
-
-      <main className="pt-20 px-4 max-w-md mx-auto min-h-screen">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-        >
-          {children}
-        </motion.div>
-      </main>
-    </div>
-  );
+  return <Router />;
 }
