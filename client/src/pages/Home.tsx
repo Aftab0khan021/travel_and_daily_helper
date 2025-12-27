@@ -1,6 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { DashboardCard } from "@/components/DashboardCard";
-import { Languages, DollarSign, Phone, Ruler, Settings } from "lucide-react";
+import { Languages, DollarSign, Phone, Ruler, Settings, BookOpen } from "lucide-react";
 
 export default function Home() {
   return (
@@ -11,6 +11,7 @@ export default function Home() {
           <p className="text-muted-foreground">What do you need help with?</p>
         </section>
 
+        {/* Updated grid to hold 6 items perfectly */}
         <div className="grid grid-cols-2 gap-4">
           <DashboardCard
             title="Translator"
@@ -40,15 +41,24 @@ export default function Home() {
             color="bg-blue-500 shadow-blue-500/30"
             delay={300}
           />
-          <div className="col-span-2">
-            <DashboardCard
-              title="Settings"
-              icon={Settings}
-              href="/settings"
-              color="bg-slate-500 shadow-slate-500/30"
-              delay={400}
-            />
-          </div>
+          
+          {/* [Added] New Card for Local Guide */}
+          <DashboardCard
+            title="Local Guide"
+            icon={BookOpen}
+            href="/guide"
+            color="bg-orange-500 shadow-orange-500/30"
+            delay={400}
+          />
+
+          {/* [Updated] Settings is now a standard card to complete the grid */}
+          <DashboardCard
+            title="Settings"
+            icon={Settings}
+            href="/settings"
+            color="bg-slate-500 shadow-slate-500/30"
+            delay={500}
+          />
         </div>
       </div>
     </Layout>

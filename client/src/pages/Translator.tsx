@@ -1,28 +1,12 @@
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
-import { ArrowUpDown, Search, Copy, Check } from "lucide-react";
+import { ArrowUpDown, Copy, Check, Search } from "lucide-react"; // Added Search icon
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import dictionaryData from "../data/dictionary.json"; // [Import the JSON file]
 
-const DICTIONARY: Record<string, string> = {
-  'hello': 'नमस्ते (Namaste)',
-  'thank you': 'धन्यवाद (Dhanyavaad)',
-  'good morning': 'सुप्रभात (Suprabhaat)',
-  'water': 'पानी (Paani)',
-  'food': 'खाना (Khaana)',
-  'help': 'मदद (Madad)',
-  'how are you': 'आप कैसे हैं (Aap kaise hain?)',
-  'price': 'कीमत (Keemat)',
-  'doctor': 'डॉक्टर (Doctor)',
-  'police': 'पुलिस (Police)',
-  'bathroom': 'शौचालय (Shauchalay)',
-  'yes': 'हाँ (Haan)',
-  'no': 'नहीं (Nahi)',
-  'excuse me': 'क्षमा करें (Kshama karen)',
-  'left': 'बाएं (Baayein)',
-  'right': 'दाएं (Daayein)',
-  'stop': 'रुको (Ruko)'
-};
+// Type assertion to ensure TypeScript knows the shape of the data
+const DICTIONARY: Record<string, string> = dictionaryData;
 
 export default function Translator() {
   const [input, setInput] = useState("");
@@ -35,10 +19,14 @@ export default function Translator() {
     const normalized = term.toLowerCase().trim();
     
     if (direction === "en-hi") {
-      return DICTIONARY[normalized] || "Translation not found in offline dictionary";
+      // Direct lookup
+      return DICTIONARY[normalized] || "Translation not found";
     } else {
-      // Very basic reverse lookup for demo purposes
-      const entry = Object.entries(DICTIONARY).find(([_, val]) => val.includes(term));
+      // Reverse lookup (search by value)
+      // Note: This is simple matching. Real Hindi typing is hard, so this helps basic searches.
+      const entry = Object.entries(DICTIONARY).find(([_, val]) => 
+        val.toLowerCase().includes(normalized)
+      );
       return entry ? entry[0] : "Translation not found";
     }
   };
@@ -131,7 +119,7 @@ export default function Translator() {
       <div className="mt-6">
         <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-1">Quick Phrases</h3>
         <div className="grid grid-cols-2 gap-2">
-          {['Hello', 'Thank You', 'Water', 'Help', 'Doctor', 'Price'].map((phrase) => (
+          {['Water', 'Food', 'Toilet', 'Help', 'Price', 'Hotel'].map((phrase) => (
             <button
               key={phrase}
               onClick={() => {
