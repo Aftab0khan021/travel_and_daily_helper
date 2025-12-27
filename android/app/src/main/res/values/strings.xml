@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Local Life</string>
+    <string name="title_activity_main">Local Life</string>
+    <string name="package_name">com.locallife.app</string>
+    <string name="custom_url_scheme">com.locallife.app</string>
+</resources>
