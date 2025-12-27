@@ -1,0 +1,149 @@
+You are an expert Flutter developer and product engineer.
+
+Build a COMPLETE Flutter Android application named:
+
+"Local Life – Travel & Daily Helper"
+
+Target:
+- Solo developer
+- Free tools only
+- Offline-first
+- Mid-range Android phones
+- Play Store ready (AAB compatible)
+
+------------------------------------
+TECH STACK
+------------------------------------
+- Flutter (latest stable)
+- Dart
+- Material 3
+- Android only (no iOS)
+- No paid APIs
+- Offline functionality using local JSON and SharedPreferences
+
+------------------------------------
+APP FEATURES (MVP – MUST IMPLEMENT ALL)
+------------------------------------
+
+1. HOME DASHBOARD
+- Grid layout (2 columns)
+- Cards with icons + titles
+- Navigation to all features
+- Features:
+  - Offline Translator
+  - Currency Converter
+  - Emergency Numbers
+  - Unit Converter
+  - Settings
+
+------------------------------------
+
+2. OFFLINE TRANSLATOR (EN ↔ HI)
+- No internet required
+- Use local JSON dictionary stored in assets
+- Two text fields (input + output)
+- Swap language button
+- Simple word/sentence lookup
+- Handle unknown words gracefully
+
+Example JSON:
+{
+  "hello": "नमस्ते",
+  "thank you": "धन्यवाद",
+  "good morning": "सुप्रभात"
+}
+
+------------------------------------
+
+3. CURRENCY CONVERTER (OFFLINE)
+- Base currency: INR
+- Convert between INR, USD, EUR
+- Use hardcoded rates (modifiable)
+- Show "Last updated" timestamp
+- Simple dropdown + input + result
+
+------------------------------------
+
+4. EMERGENCY NUMBERS
+- Country-based static data
+- Default: India
+- Emergency types:
+  - Police
+  - Ambulance
+  - Fire
+- One-tap call using phone dialer
+- Store emergency data locally (JSON)
+
+------------------------------------
+
+5. UNIT CONVERTER
+- Categories:
+  - Length (km, m, cm)
+  - Weight (kg, g)
+  - Temperature (Celsius, Fahrenheit)
+- Simple formulas
+- Instant conversion
+
+------------------------------------
+
+6. SETTINGS SCREEN
+- Dark mode toggle
+- Save preferences using SharedPreferences
+- App version display
+
+------------------------------------
+PROJECT STRUCTURE (STRICT)
+------------------------------------
+
+lib/
+ ├── main.dart
+ ├── screens/
+ │    ├── home_screen.dart
+ │    ├── translator_screen.dart
+ │    ├── currency_screen.dart
+ │    ├── emergency_screen.dart
+ │    ├── unit_converter_screen.dart
+ │    └── settings_screen.dart
+ ├── services/
+ │    ├── translator_service.dart
+ │    ├── currency_service.dart
+ │    └── storage_service.dart
+ ├── models/
+ ├── widgets/
+ └── utils/
+
+assets/
+ ├── data/
+ │    ├── translator_en_hi.json
+ │    └── emergency_numbers.json
+
+------------------------------------
+UI / UX RULES
+------------------------------------
+- Clean, minimal UI
+- Large buttons
+- Icon-first design
+- Material 3 components
+- Dark mode support
+- No unnecessary animations
+- Optimized for performance
+
+------------------------------------
+DELIVERABLES
+------------------------------------
+1. Full Flutter source code
+2. pubspec.yaml with correct dependencies
+3. Proper asset loading
+4. No TODOs or placeholders
+5. App must run without errors on Android
+6. Ready for Play Store build (AAB)
+
+------------------------------------
+IMPORTANT
+------------------------------------
+- Do NOT use any paid API
+- Do NOT leave unfinished code
+- Follow best Flutter practices
+- Add basic comments where needed
+
+Start by creating the full Flutter project and then generate all required files with complete implementations.
