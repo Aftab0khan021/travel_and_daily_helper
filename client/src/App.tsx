@@ -1,14 +1,12 @@
 import { Switch, Route } from "wouter";
-import { Toaster } from "@/components/ui/toaster";
-import { useTheme } from "@/hooks/use-theme";
 
-import Home from "@/pages/Home";
-import Translator from "@/pages/Translator";
-import Currency from "@/pages/Currency";
-import Emergency from "@/pages/Emergency";
-import Units from "@/pages/Units";
-import Settings from "@/pages/Settings";
-import NotFound from "@/pages/not-found";
+import Home from "./pages/Home";
+import Translator from "./pages/Translator";
+import Currency from "./pages/Currency";
+import Emergency from "./pages/Emergency";
+import Units from "./pages/Units";
+import Settings from "./pages/Settings";
+import NotFound from "./pages/not-found";
 
 function Router() {
   return (
@@ -24,15 +22,6 @@ function Router() {
   );
 }
 
-function App() {
-  useTheme();
-
-  return (
-    <>
-      <Router />
-      <Toaster />
-    </>
-  );
+export default function App() {
+  return <Router />;
 }
-
-export default App;
