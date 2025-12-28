@@ -5,10 +5,13 @@ import Home from "./pages/Home";
 import Translator from "./pages/Translator";
 import Currency from "./pages/Currency";
 import Emergency from "./pages/Emergency";
+import Weather from "@/pages/Weather";
+import Expenses from "@/pages/Expenses";
 import Units from "./pages/Units";
 import Guide from "./pages/Guide";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/not-found";
+
 
 function Router() {
   return (
@@ -19,6 +22,8 @@ function Router() {
       <Route path="/emergency" component={Emergency} />
       <Route path="/units" component={Units} />
       <Route path="/guide" component={Guide} />
+      <Route path="/weather" component={Weather} />
+      <Route path="/expenses" component={Expenses} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>

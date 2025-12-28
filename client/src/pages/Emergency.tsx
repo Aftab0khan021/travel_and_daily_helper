@@ -1,92 +1,114 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
-import { Phone, Shield, Flame, HeartPulse, Globe } from "lucide-react";
-import { Geolocation } from '@capacitor/geolocation';
+import { Phone, Shield, Flame, HeartPulse, Globe, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Different datasets for different regions
-const NUMBERS_INDIA = [
-  { id: 1, name: "Police", number: "100", icon: Shield, color: "text-blue-500", bg: "bg-blue-500/10" },
-  { id: 2, name: "Fire", number: "101", icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10" },
-  { id: 3, name: "Ambulance", number: "102", icon: HeartPulse, color: "text-red-500", bg: "bg-red-500/10" },
-];
-
-const NUMBERS_GLOBAL = [
-  { id: 1, name: "Universal Emergency", number: "112", icon: Shield, color: "text-blue-500", bg: "bg-blue-500/10" },
-  { id: 2, name: "US/General", number: "911", icon: Phone, color: "text-red-500", bg: "bg-red-500/10" },
-];
+// Database of Major Countries
+const EMERGENCY_DB: Record<string, any[]> = {
+  "IN": [ // India
+    { name: "Police", number: "100", icon: Shield, color: "text-blue-500", bg: "bg-blue-100" },
+    { name: "Ambulance", number: "102", icon: HeartPulse, color: "text-red-500", bg: "bg-red-100" },
+    { name: "Fire", number: "101", icon: Flame, color: "text-orange-500", bg: "bg-orange-100" },
+  ],
+  "US": [ // USA
+    { name: "Emergency (All)", number: "911", icon: Shield, color: "text-red-500", bg: "bg-red-100" },
+  ],
+  "UK": [ // UK
+    { name: "Emergency (All)", number: "999", icon: Shield, color: "text-red-500", bg: "bg-red-100" },
+  ],
+  "EU": [ // Europe (General)
+    { name: "General Emergency", number: "112", icon: Shield, color: "text-blue-500", bg: "bg-blue-100" },
+  ],
+  "GLOBAL": [ // Fallback
+    { name: "GSM Standard", number: "112", icon: Shield, color: "text-blue-500", bg: "bg-blue-100" },
+    { name: "International", number: "911", icon: Phone, color: "text-red-500", bg: "bg-red-100" },
+  ]
+};
 
 export default function Emergency() {
-  const [locationStatus, setLocationStatus] = useState("Detecting location...");
-  const [isIndia, setIsIndia] = useState(true); // Default to India for safety
+  const [country, setCountry] = useState("GLOBAL");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkLocation = async () => {
+    // Attempt to detect country via IP (Works for Global users)
+    const detectCountry = async () => {
       try {
-        const position = await Geolocation.getCurrentPosition();
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
-        // Rough bounding box for India (Lat 8-37, Lon 68-97)
-        if (lat >= 8 && lat <= 37 && lon >= 68 && lon <= 97) {
-          setIsIndia(true);
-          setLocationStatus("India Detected");
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        if (data.country_code && EMERGENCY_DB[data.country_code]) {
+          setCountry(data.country_code);
+        } else if (["FR", "DE", "ES", "IT"].includes(data.country_code)) {
+          setCountry("EU");
         } else {
-          setIsIndia(false);
-          setLocationStatus("International Location Detected");
+          setCountry("GLOBAL");
         }
       } catch (e) {
-        console.log("Location failed, using default");
-        setLocationStatus("Location unavailable - Defaulting to India");
+        console.log("Offline or detection failed");
+      } finally {
+        setLoading(false);
       }
     };
-    checkLocation();
+    detectCountry();
   }, []);
 
-  const numbers = isIndia ? NUMBERS_INDIA : NUMBERS_GLOBAL;
+  const numbers = EMERGENCY_DB[country] || EMERGENCY_DB["GLOBAL"];
 
   return (
-    <Layout title="Emergency">
-      <div className="space-y-4">
-        {/* Status Bar */}
-        <div className="bg-muted px-4 py-2 rounded-lg flex items-center justify-between text-xs font-medium text-muted-foreground">
-            <span className="flex items-center gap-2"><Globe className="w-3 h-3"/> {locationStatus}</span>
-            <button onClick={() => setIsIndia(!isIndia)} className="text-primary underline">Switch Manually</button>
-        </div>
-
-        <div className="bg-red-50 border border-red-100 rounded-2xl p-4 flex gap-4 items-start dark:bg-red-950/20 dark:border-red-900/50">
-          <div className="bg-red-100 p-2 rounded-full dark:bg-red-900/50">
-            <Phone className="w-5 h-5 text-red-600 dark:text-red-400" />
+    <Layout title="Emergency Help">
+      <div className="space-y-6">
+        
+        {/* Country Selector / Status */}
+        <div className="bg-card p-4 rounded-2xl border border-border shadow-sm flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-primary/10 p-2 rounded-full">
+              <MapPin className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground font-bold uppercase">Current Region</p>
+              <h3 className="font-bold">{country === "IN" ? "India" : country === "US" ? "USA" : country}</h3>
+            </div>
           </div>
-          <div>
-            <h3 className="font-bold text-red-900 dark:text-red-200">Emergency Mode</h3>
-            <p className="text-sm text-red-700/80 mt-1 dark:text-red-300/70">
-              Tap any card to dial immediately.
-            </p>
-          </div>
+          <select 
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            className="bg-muted px-3 py-2 rounded-lg text-sm font-medium outline-none"
+          >
+            <option value="GLOBAL">Global</option>
+            <option value="IN">India</option>
+            <option value="US">USA</option>
+            <option value="UK">UK</option>
+            <option value="EU">Europe</option>
+          </select>
         </div>
 
         <div className="grid gap-3">
-          {numbers.map((item) => (
+          {numbers.map((item, idx) => (
             <a
-              key={item.id}
+              key={idx}
               href={`tel:${item.number}`}
-              className="flex items-center justify-between p-4 bg-card rounded-2xl border border-border shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+              className="flex items-center justify-between p-5 bg-card rounded-3xl border border-border shadow-sm active:scale-95 transition-transform"
             >
               <div className="flex items-center gap-4">
-                <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center", item.bg)}>
-                  <item.icon className={cn("w-6 h-6", item.color)} />
+                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center", item.bg)}>
+                  <item.icon className={cn("w-7 h-7", item.color)} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg">{item.name}</h3>
-                  <p className="text-muted-foreground text-sm font-medium">Tap to call</p>
+                  <h3 className="font-bold text-xl">{item.name}</h3>
+                  <p className="text-muted-foreground text-sm">Tap to call</p>
                 </div>
               </div>
-              <div className="text-2xl font-bold font-mono tracking-wider bg-muted/50 px-3 py-1 rounded-lg">
+              <div className="text-3xl font-black text-foreground tracking-tight">
                 {item.number}
               </div>
             </a>
           ))}
+        </div>
+
+        <div className="text-center p-4">
+           <p className="text-xs text-muted-foreground bg-muted inline-block px-3 py-1 rounded-full">
+             <Globe className="w-3 h-3 inline mr-1"/>
+             {loading ? "Detecting location..." : "Auto-detection enabled"}
+           </p>
         </div>
       </div>
     </Layout>
