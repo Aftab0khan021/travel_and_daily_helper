@@ -29,11 +29,10 @@ export default function App() {
   useEffect(() => {
     const initAdMob = async () => {
       try {
-        // Initialize AdMob
         await AdMob.initialize({
           requestTrackingAuthorization: true,
-          testingDevices: ['2077ef9a63d2b398840261c8221a0c9b'], 
-          initializeForTesting: true,
+          // testingDevices: ['2077ef9a63d2b398840261c8221a0c9b'], // <--- REMOVE THIS LINE
+          initializeForTesting: true, // This is enough for emulators
         });
         console.log("AdMob initialized");
       } catch (e) {
