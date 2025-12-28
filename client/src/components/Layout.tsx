@@ -17,33 +17,28 @@ export function Layout({ children, title, showBack = true }: LayoutProps) {
   useEffect(() => {
     const showBanner = async () => {
       try {
-        // Initialize AdMob if it hasn't been already (safe to call multiple times)
         await AdMob.initialize();
-
+        
         await AdMob.showBanner({
-          adId: 'ca-app-pub-3940256099942544/6300978111', // Google's Official Test ID
-          // Use BOTTOM_CENTER to ensure it looks good on all screen sizes
-          position: BannerAdPosition.BOTTOM_CENTER, 
+          // Your Real Ad Unit ID is here
+          adId: 'ca-app-pub-2317591354143717/2083651471', 
+          position: BannerAdPosition.BOTTOM,
           size: BannerAdSize.BANNER,
           margin: 0,
         });
       } catch (e) {
-        // This is expected when running in a web browser (non-Android environment)
-        console.log("AdMob banner failed or not supported in this environment", e);
+        console.log("AdMob banner failed (likely running on web, not android)", e);
       }
     };
 
     showBanner();
 
-    // Cleanup: Hide banner when component unmounts to prevent duplicates or overlaps
-    return () => { 
-        AdMob.hideBanner().catch(() => {}); 
-    };
+    // Optional: Cleanup if needed
+    // return () => { AdMob.hideBanner().catch(console.error); };
   }, []);
 
   return (
-    // pb-20 adds bottom padding so the ad doesn't cover your app content
-    <div className="min-h-screen bg-muted/30 pb-20"> 
+    <div className="min-h-screen bg-muted/30 pb-20"> {/* Padding for Ad */}
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/40">
         <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
           {showBack ? (
